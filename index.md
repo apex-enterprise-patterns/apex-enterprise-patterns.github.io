@@ -7,6 +7,9 @@ layout: home
 Apex Enterprise Patterns Open Source
 {: .fs-9 }
 
+Under Construction
+{: .label .label-yellow }
+
 Design patterns are an invaluable tool for developers and architects looking to build enterprise solutions. Here are presented some tried and tested enterprise application engineering patterns that have been used in other platforms and languages. 
 {: .fs-6 .fw-300 }
 
