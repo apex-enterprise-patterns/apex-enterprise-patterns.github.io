@@ -5,6 +5,6 @@ has_children: true
 nav_order: 3
 ---
 
-# Posts
+# Apex DI
 
 {: .fs-6 .fw-300 }
