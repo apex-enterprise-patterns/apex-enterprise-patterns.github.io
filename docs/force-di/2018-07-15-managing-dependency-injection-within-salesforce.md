@@ -1,6 +1,6 @@
 ---
 title: Managing Dependency Injection within Salesforce
-parent: Apex DI
+parent: Force DI
 nav_order: 1
 ---
 When developing within Salesforce, dependencies are formed in many ways, not just those made explicitly when **writing code** , but those formed by using **declarative tools**. Such as defining **Actions** and **Layouts** for example. This blog introduces a **new open source library** I have been working on called **[Force DI](https://github.com/afawcett/force-di)**. The goal is to simplify and more importantly consolidate where and how to configure at runtime certain dependencies between **Apex** , **Visualforce** or **Lightning**  **component** code.

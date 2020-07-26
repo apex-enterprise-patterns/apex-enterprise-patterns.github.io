@@ -1,6 +1,6 @@
 ---
 title: Test Driven Development, Mocking and Force DI
-parent: Apex DI
+parent: Force DI
 nav_order: 2
 ---
 In this blog I want to highlight the use of [Test.createStub](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_testing_stub_api.htm) with [Force DI](https://andyinthecloud.com/2018/07/15/managing-dependency-injection-within-salesforce/), to effectively inject mock implementations of dependent classes. We will go through a small example showing a **top-level class with two dependencies**. In order to test that class in isolation as part of a **true unit test** , we will mock its dependencies and then inject the mocks. This blog will also show how Force DI adds value by **extracting and encapsulating configuration code** from the app.
