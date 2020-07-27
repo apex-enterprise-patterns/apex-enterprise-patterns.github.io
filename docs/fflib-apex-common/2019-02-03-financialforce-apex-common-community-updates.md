@@ -1,11 +1,11 @@
 ---
-title: FinancialForce Apex Common Community Updates
+title: New Features - Feb 2019
 parent: Apex Commons
-nav_order: 11
+nav_order: 103
 ---
 ![]({{ site.baseurl }}/assets/images/contributions-e1549239445378.png?w=300)
 
-This short blog highlights a batch of new features recently merged to the [FinancialForce Apex Common library aka fflib](https://github.com/financialforcedev/fflib-apex-common#this-library). In addition to the various Dreamforce and blog resources linked from the repo, fans of&nbsp;[Trailhead](https://trailhead.salesforce.com/en/home)&nbsp;can also find modules relating to the library [here](https://trailhead.salesforce.com/en/content/learn/modules/apex_patterns_sl) and [here](https://trailhead.salesforce.com/en/content/learn/modules/apex_patterns_dsl). But please read this blog first before heading out to the trails to hunt down badges!&nbsp;It's really pleasing to see it continue to get great contributions so here goes...
+This short blog highlights a set of features added by the community. It is really pleasing to see this library continue to get great contributions. Thank you!
 
 **Added methods for detecting changed records with given fields in the Domain layer (fflib\_SObjectDomain)**
 

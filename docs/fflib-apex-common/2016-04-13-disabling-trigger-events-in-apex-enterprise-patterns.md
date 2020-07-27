@@ -3,7 +3,7 @@ title: Disabling Trigger Events in Apex Enterprise Patterns
 parent: Apex Commons
 nav_order: 10
 ---
-I'm proud to host my first **guest blogger**!&nbsp;**[Chris Mail](https://twitter.com/Autobat)** or **[Autobat](https://github.com/Autobat)** as he is known on GitHub. Take it away Chris....
+Thanks to **[Chris Mail](https://twitter.com/Autobat)** or **[Autobat](https://github.com/Autobat)** for contributing this blog.
 
 **How to put the safety on...**
 

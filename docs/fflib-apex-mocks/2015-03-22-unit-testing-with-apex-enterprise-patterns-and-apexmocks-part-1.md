@@ -3,7 +3,7 @@ title: Unit Testing, Apex Enterprise Patterns and ApexMocks - Part 1
 parent: Apex Mocks
 nav_order: 1
 ---
-If you attended my [Advanced Apex Enterprise Patterns](http://dreamforce.vidyard.com/watch/7QtP2628KmtXfmiwI-7B1w%20) session at **Dreamforce 2014** you'll have heard me highlight the different between Apex tests that are either written as true unit test vs those written in a way that more resembles an integration test. As [Paul Hardaker](https://twitter.com/comic96) ([ApexMocks](https://github.com/financialforcedev/fflib-apex-mocks/blob/master/README.md) author) once pointed out to me, technically the reality is Apex developers often only end up writing only integration tests.
+As [Paul Hardaker](https://twitter.com/comic96) ([ApexMocks](https://github.com/financialforcedev/fflib-apex-mocks/blob/master/README.md) author) once pointed out, technically the reality is Apex developers often only end up writing only integration tests.
 
 Lets review Wikipedia's definition of [unit tests](http://en.wikipedia.org/wiki/Unit_testing)...
 
@@ -38,15 +38,13 @@ For complex applications this approach per test can&nbsp;be come quite an overhe
 
 Well those of you familiar with [Apex Enterprise Patterns](https://github.com/financialforcedev/fflib-apex-common/blob/master/README.md#application-enterprise-patterns-on-forcecom) will know its big on separation of concerns. Thus aspects such as querying the database and updating it are encapsulated away in so called Selectors and the Unit Of Work. Just prior to Dreamforce 2014, the patterns introduced the [**Application class**](http://andyinthecloud.com/2014/08/26/preview-of-advanced-apex-enterprise-patterns-session/), this provides a single application wide means to access the **Service** , **Domain** , **Selector** and **Unit Of Work** implementations&nbsp;as apposed to directly instantiating&nbsp;them.
 
-If you've been reading my book, you'll know that this also provides access to new Object Orientated Programming possibilities, such as polymorphism between the Service layer and Domain layer, allowing for a functional frameworks and greater reuse to be constructed within the code base.
-
 In this two part blog series, we are focusing on the role of the **Application** class and its **setMock** methods. These methods, modelled after the platforms **Test.setMock** method (for mocking HTTP comms), provide a means to mock the core architectural layers of an application which is based on the Apex Enterprise Patterns. By allowing mocking in these areas, we can see that we can write unit tests that focus only on the behaviour of the controller, service or domain class we&nbsp;are testing.
 
 ![Unit Testing]({{ site.baseurl }}/assets/images/unit-testing.png)
 
 **Preparing your Service, Domain and Selector classes for mocking**
 
-As described in my [Dreamforce 2014 presentation](http://dreamforce.vidyard.com/watch/7QtP2628KmtXfmiwI-7B1w%20), [Apex Interfaces](https://www.salesforce.com/us/developer/docs/apexcode/Content/apex_classes_interfaces.htm) are key to implementing mocking. You must define these in order to allow the mocking framework to substitute dynamically different implementations. The patterns library also provides base interfaces that reflect the base class methods for the Selector and Domain layers. The [sample application contains a full example of these interfaces](https://github.com/financialforcedev/fflib-apex-common-samplecode) and how they are applied.
+[Apex Interfaces](https://www.salesforce.com/us/developer/docs/apexcode/Content/apex_classes_interfaces.htm) are key to implementing mocking. You must define these in order to allow the mocking framework to substitute dynamically different implementations. The patterns library also provides base interfaces that reflect the base class methods for the Selector and Domain layers. The [sample application contains a full example of these interfaces](https://github.com/financialforcedev/fflib-apex-common-samplecode) and how they are applied.
 
 ```java
 
@@ -274,7 +272,7 @@ In this blog we've looked at how to defined and apply interfaces between your se
 
 I've seen dependency injection done via&nbsp;constructor injection, my personal preference is to use the approach shown in this blog. My motivation for this lies with the fact that these pattern layers are well enough known throughout the application code base and the Application class supports other facilities&nbsp;such as polymorphic instantiation of domain classes and helper methods as shown above on the Selector factory.
 
-In the [second part](http://andyinthecloud.com/2015/03/29/unit-testing-apex-enterprise-patterns-and-apexmocks-part-2/) of this series we will look at how to write true unit tests for your controller, service and domain classes, leveraging the amazing [ApexMocks library](https://github.com/financialforcedev/fflib-apex-mocks/blob/master/README.md)! If in the meantime you wan to get a glimpse of what this might look like take a wonder through the Apex Enterprise Patterns sample application tests [here](https://github.com/apex-enterprise-patterns/fflib-apex-common-samplecode/blob/master/sfdx-source/apex-common-samplecode/test/classes/service/OpportunitiesServiceTest.cls#L38) and [here](https://github.com/apex-enterprise-patterns/fflib-apex-common-samplecode/blob/master/sfdx-source/apex-common-samplecode/test/classes/controllers/OpportunityApplyDiscountControllerTest.cls#L30).
+In the second part of this series we will look at how to write true unit tests for your controller, service and domain classes, leveraging the amazing [ApexMocks library](https://github.com/financialforcedev/fflib-apex-mocks/blob/master/README.md). If in the meantime you wan to get a glimpse of what this might look like take a wonder through the Apex Enterprise Patterns sample application tests [here](https://github.com/apex-enterprise-patterns/fflib-apex-common-samplecode/blob/master/sfdx-source/apex-common-samplecode/test/classes/service/OpportunitiesServiceTest.cls#L38) and [here](https://github.com/apex-enterprise-patterns/fflib-apex-common-samplecode/blob/master/sfdx-source/apex-common-samplecode/test/classes/controllers/OpportunityApplyDiscountControllerTest.cls#L30).
 
 ```java
 // Provide a mock instance of a Unit of Work  

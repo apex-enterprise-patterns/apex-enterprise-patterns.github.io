@@ -3,13 +3,13 @@ title: Unit Testing, Apex Enterprise Patterns and ApexMocks – Part 2
 parent: Apex Mocks
 nav_order: 2
 ---
-In&nbsp;[Part 1](http://andyinthecloud.com/2015/03/22/unit-testing-with-apex-enterprise-patterns-and-apexmocks-part-1/)&nbsp;of this blog series i introduced a new means&nbsp;of applying true unit testing to Apex&nbsp;code&nbsp;leveraging the&nbsp;[Apex Enterprise Patterns](https://github.com/financialforcedev/fflib-apex-common). Covering the differences between true unit testing vs integration testing and how the lines can get a little blurred when writing Apex test methods.
+In part 1 of this blog series we introduced a new means of applying true unit testing to Apex code leveraging the [Apex Enterprise Patterns](https://github.com/financialforcedev/fflib-apex-common). Covering the differences between true unit testing vs integration testing and how the lines can get a little blurred when writing Apex test methods.
 
-If your following along&nbsp;you should be all set to start writing [true unit tests](http://en.wikipedia.org/wiki/Unit_testing) against your **controller** , **service** and **domain** classes.&nbsp;Leveraging the inbuilt dependency injection framework provided by the **Application** class introduced in the last blog. By injecting mock implementations of service, domain, selector and unit of work classes accordingly.
+If your following along you should be all set to start writing [true unit tests](http://en.wikipedia.org/wiki/Unit_testing) against your **controller** , **service** and **domain** classes.&nbsp;Leveraging the inbuilt dependency injection framework provided by the **Application** class introduced in the last blog. By injecting mock implementations of service, domain, selector and unit of work classes accordingly.
 
 **What are Mock classes and why do i need them?**
 
-Depending on the type of&nbsp; **class your unit testing** &nbsp;you'll need to mock different dependencies&nbsp;so that you don't have to worry about the data setup of those classes while your busy putting your hard work in to testing your specific class.
+Depending on the type of **class your unit testing** you'll need to mock different dependencies&nbsp;so that you don't have to worry about the data setup of those classes while your busy putting your hard work in to testing your specific class.
 
 ![Unit Testing]({{ site.baseurl }}/assets/images/unit-testing.png)
 
@@ -21,42 +21,42 @@ In this blog we are going to focus on an example **unit test method for a Servic
  @IsTest  
  private static void callingServiceShouldCallSelectorApplyDiscountInDomainAndCommit()  
  {  
- // Create mocks  
- fflib_ApexMocks mocks = new fflib_ApexMocks();  
- fflib_ISObjectUnitOfWork uowMock = new fflib_SObjectMocks.SObjectUnitOfWork(mocks);  
- IOpportunities domainMock = new Mocks.Opportunities(mocks);  
- IOpportunitiesSelector selectorMock = new Mocks.OpportunitiesSelector(mocks);
+    // Create mocks  
+    fflib_ApexMocks mocks = new fflib_ApexMocks();  
+    fflib_ISObjectUnitOfWork uowMock = new fflib_SObjectMocks.SObjectUnitOfWork(mocks);  
+    IOpportunities domainMock = new Mocks.Opportunities(mocks);  
+    IOpportunitiesSelector selectorMock = new Mocks.OpportunitiesSelector(mocks);
 
- // Given  
- mocks.startStubbing();  
- List<Opportunity> testOppsList = new List<Opportunity> {  
- new Opportunity(  
- Id = fflib_IDGenerator.generate(Opportunity.SObjectType),  
- Name = 'Test Opportunity',  
- StageName = 'Open',  
- Amount = 1000,  
- CloseDate = System.today()) };  
- Set<Id> testOppsSet = new Map<Id, Opportunity>(testOppsList).keySet();  
- mocks.when(domainMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
- mocks.when(selectorMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
- mocks.when(selectorMock.selectByIdWithProducts(testOppsSet)).thenReturn(testOppsList);  
- mocks.stopStubbing();  
- Decimal discountPercent = 10;  
- Application.UnitOfWork.setMock(uowMock);  
- Application.Domain.setMock(domainMock);  
- Application.Selector.setMock(selectorMock);
+    // Given  
+    mocks.startStubbing();  
+    List<Opportunity> testOppsList = new List<Opportunity> {  
+    new Opportunity(  
+    Id = fflib_IDGenerator.generate(Opportunity.SObjectType),  
+    Name = 'Test Opportunity',  
+    StageName = 'Open',  
+    Amount = 1000,  
+    CloseDate = System.today()) };  
+    Set<Id> testOppsSet = new Map<Id, Opportunity>(testOppsList).keySet();  
+    mocks.when(domainMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
+    mocks.when(selectorMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
+    mocks.when(selectorMock.selectByIdWithProducts(testOppsSet)).thenReturn(testOppsList);  
+    mocks.stopStubbing();  
+    Decimal discountPercent = 10;  
+    Application.UnitOfWork.setMock(uowMock);  
+    Application.Domain.setMock(domainMock);  
+    Application.Selector.setMock(selectorMock);
 
- // When  
- OpportunitiesService.applyDiscounts(testOppsSet, discountPercent);
+    // When  
+    OpportunitiesService.applyDiscounts(testOppsSet, discountPercent);
 
- // Then  
- ((IOpportunitiesSelector)  
- mocks.verify(selectorMock)).selectByIdWithProducts(testOppsSet);  
- ((IOpportunities)  
- mocks.verify(domainMock)).applyDiscount(discountPercent, uowMock);  
- ((fflib\_ISObjectUnitOfWork)  
- mocks.verify(uowMock, 1)).commitWork();  
- }  
+    // Then  
+    ((IOpportunitiesSelector)  
+        mocks.verify(selectorMock)).selectByIdWithProducts(testOppsSet);  
+    ((IOpportunities)  
+        mocks.verify(domainMock)).applyDiscount(discountPercent, uowMock);  
+    ((fflib\_ISObjectUnitOfWork)  
+        mocks.verify(uowMock, 1)).commitWork();  
+}  
 ```
 
 First of all, you'll notice the test method name is a little longer than you might be used to, also the general layout&nbsp;of the test splits code into **Given** , **When** and **Then** blocks. These conventions help add some documentation, readability and consistency to test methods, as well as helping you focus on what it is your testing and assuming to happen. The convention is one defined by [Martin Fowler](http://martinfowler.com/), you can read more about [GivenWhenThen here](http://martinfowler.com/bliki/GivenWhenThen.html). The test method name itself, stems from a desire to express the behaviour the test is confirming.
@@ -100,7 +100,7 @@ To generate the **Mocks** class used above use&nbsp;the&nbsp; **ApexMocks Genera
 
 You can configure the output of the tool using a properties file (you can find more information [here](https://code4cloud.wordpress.com/2014/06/27/new-improved-apex-mocks-generator/)).
 
-```java
+```properties
 IOpportunities=Opportunities:fflib_SObjectMocks.SObjectDomain  
 IOpportunitiesSelector=OpportunitiesSelector:fflib_SObjectMocks.SObjectSelector  
 IOpportunitiesService=OpportunitiesService  
@@ -113,23 +113,22 @@ The generated mock classes are contained&nbsp;as inner classes in the Mocks.cls 
 @isTest  
 public class Mocks  
 {  
- public class OpportunitiesService  
- implements IOpportunitiesService  
- {  
- // Mock implementations of the interface methods...  
- }
+    public class OpportunitiesService implements IOpportunitiesService  
+    {  
+        // Mock implementations of the interface methods...  
+    }
 
-public class OpportunitiesSelector extends fflib_SObjectMocks.SObjectSelector  
- implements IOpportunitiesSelector  
- {  
- // Mock implementations of the interface methods...  
- }
+    public class OpportunitiesSelector extends fflib_SObjectMocks.SObjectSelector  
+        implements IOpportunitiesSelector  
+    {  
+        // Mock implementations of the interface methods...  
+    }
 
-public class Opportunities extends fflib_SObjectMocks.SObjectDomain  
- implements IOpportunities  
- {  
- // Mock implementations of the interface methods...  
- }  
+    public class Opportunities extends fflib_SObjectMocks.SObjectDomain  
+        implements IOpportunities  
+    {  
+        // Mock implementations of the interface methods...  
+    }  
 }  
 ```
 
@@ -145,17 +144,17 @@ Here is an example of configuring&nbsp;a **Selector mock method** to return test
 // Given  
 mocks.startStubbing();  
 List<Opportunity> testOppsList = new List<Opportunity> {  
- new Opportunity(  
- Id = fflib_IDGenerator.generate(Opportunity.SObjectType),  
-  Name = 'Test Opportunity',  
-  StageName = 'Open',  
-  Amount = 1000,  
-  CloseDate = System.today()) };  
- Set<Id> testOppsSet = new Map<Id, Opportunity>(testOppsList).keySet();  
- mocks.when(domainMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
- mocks.when(selectorMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
- mocks.when(selectorMock.selectByIdWithProducts(testOppsSet)).thenReturn(testOppsList);  
- mocks.stopStubbing();  
+    new Opportunity(  
+        Id = fflib_IDGenerator.generate(Opportunity.SObjectType),  
+        Name = 'Test Opportunity',  
+        StageName = 'Open',  
+        Amount = 1000,  
+        CloseDate = System.today()) };  
+Set<Id> testOppsSet = new Map<Id, Opportunity>(testOppsList).keySet();  
+mocks.when(domainMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
+mocks.when(selectorMock.sObjectType()).thenReturn(Opportunity.SObjectType);  
+mocks.when(selectorMock.selectByIdWithProducts(testOppsSet)).thenReturn(testOppsList);  
+mocks.stopStubbing();  
 ```
 
 **TIP:** If you want to [mock sub-select queries](http://andyinthecloud.com/2014/12/03/mocking-soql-sub-select-query-results/) returned from a selector take a look at this.
@@ -180,11 +179,11 @@ OpportunitiesService.applyDiscounts(testOppsSet, discountPercent);
 
 // Then  
 ((IOpportunitiesSelector)  
- mocks.verify(selectorMock)).selectByIdWithProducts(testOppsSet);  
+    mocks.verify(selectorMock)).selectByIdWithProducts(testOppsSet);  
 ((IOpportunities)  
- mocks.verify(domainMock)).applyDiscount(discountPercent, uowMock);  
+    mocks.verify(domainMock)).applyDiscount(discountPercent, uowMock);  
 ((fflib_ISObjectUnitOfWork)  
- mocks.verify(uowMock, 1)).commitWork();  
+    mocks.verify(uowMock, 1)).commitWork();  
 ```
 
 **TIP:** &nbsp;You can verify method calls have been made and also how many times. For example checking a method is only called a specific number of times can help add some level of performance and optimisation checking into your tests.

@@ -14,7 +14,7 @@ You may have noticed that the&nbsp; **Apex Enterprise Patterns** &nbsp;classes p
 ```java
 global with sharing class OpportunitiesService  
 {  
- global static void applyDiscounts(\<ID\> opportunityIds, Decimal discountPercentage)  
+ global static void applyDiscounts(<ID> opportunityIds, Decimal discountPercentage)  
  {  
  // This code and any it calls runs as 'with sharing'  
  }  
@@ -29,12 +29,12 @@ The basic approach is to leverage an **inner class** that contains just the code
 public class OpportunitiesSelector extends fflib_SObjectSelector  
 {  
   public List<Opportunity> selectById(Set<Id> idSet) {  
-  // This method simply runs in the sharing context of the caller  
-  // ...  
-  return opportunities;  
+    // This method simply runs in the sharing context of the caller  
+    // ...  
+    return opportunities;  
   }
 
-  public List\<OpportunityInfo\> selectOpportunityInfo(Set\<Id\> idSet) {  
+  public List<OpportunityInfo> selectOpportunityInfo(Set<Id> idSet) {  
     // Explicitly run the query in a 'without sharing' context  
     return new SelectOpportunityInfo().selectOpportunityInfo(this, idSet);  
   }

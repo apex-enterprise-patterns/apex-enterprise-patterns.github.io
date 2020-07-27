@@ -153,7 +153,7 @@ The examples above utilize single bindings by a unique name. However, it is beco
 
 This blog has hopefully wet your appetite to learn more! If so, head over to the repo and have a look through the samples in this blog and others. My next step is to wrap this up in a DX package to make it easier to get your hands on it, for now, download the repo and [deploy via DX](https://developer.salesforce.com/platform/dx). I am also keen to explore what other aspects of [Java Guice might make sense](https://github.com/google/guice/wiki/Motivation), such as the [Linked Bindings feature](https://github.com/google/guice/wiki/LinkedBindings).
 
-Meanwhile, I would love **[feedback](https://github.com/afawcett/force-di/issues) on the sample code and library** thus far. **&nbsp;** Last but not least I would like to give a shout out to [John Daniel](https://twitter.com/imjohnmdaniel) and [Doug Ayers](https://twitter.com/douglascayers?lang=en) for their great feedback during the initial development of the library and this blog.&nbsp;Enjoy!
+Meanwhile, we would love **[feedback](https://github.com/afawcett/force-di/issues) on the sample code and library** thus far. **&nbsp;** Last but not least I would like to give a shout out to [John Daniel](https://twitter.com/imjohnmdaniel) and [Doug Ayers](https://twitter.com/douglascayers?lang=en) for their great feedback during the initial development of the library and this blog.&nbsp;Enjoy!
 
 &nbsp;
 

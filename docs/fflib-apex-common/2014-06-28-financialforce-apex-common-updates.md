@@ -1,15 +1,12 @@
 ---
-title: FinancialForce Apex Common Updates
+title: New Features - June 2014
 parent: Apex Commons
-nav_order: 4
+nav_order: 100
 ---
-This blog starts a series of updates leading up to&nbsp;[Dreamforce 2014](http://www.salesforce.com/dreamforce/DF14/),&nbsp;where I am pleased to announce that my&nbsp; **Advanced Apex Enterprise Patterns** session has just been selected! In the coming series of blogs I&nbsp;will be covering enhancements&nbsp;to the existing base classes supporting the&nbsp; **Apex Enterprise Patterns** and highlighting some of the more general classes from within the&nbsp;[FinancialForce Apex&nbsp;Common](https://github.com/financialforcedev/fflib-apex-common/blob/master/README.md)&nbsp;repository both&nbsp;reside in.
 
-This time I will be highlighting some excellent contributions from fellow **Force.com MVP** &nbsp;[Chris Peterson](https://twitter.com/ca_peterson) who has recently added more general **utility&nbsp;classes** &nbsp;to support **security** and **dynamic queries.** As well as&nbsp;some improvements from myself to the existing&nbsp; **Domain** and **Selector** classes.
+This post is highlighting some excellent contributions from &nbsp;[Chris Peterson](https://twitter.com/ca_peterson) who added more general **utility&nbsp;classes** &nbsp;to support **security** and **dynamic queries.** As well as&nbsp;some improvements from myself to the existing&nbsp; **Domain** and **Selector** classes.
 
-In a following blog I'll be going over in more detail the current&nbsp;results of some [experimental work](https://github.com/financialforcedev/fflib-apex-common/blob/fls-support-experiment/README.md#expirimental-crud-and-fls-support)&nbsp;I've been doing&nbsp;relating to **generic**  **Field Level Security** &nbsp; **enforcement** within the **patterns** base classes, meanwhile enjoy the new **fflib\_SecurityUtils** class..
-
-# **New fflib\_SecurityUtils.cls**
+### fflib_SecurityUtils.cls
 
 ![SecurityUtils]({{site.baseurl}}/assets/images/securityutils.png)
 
@@ -37,7 +34,7 @@ fflib_SecurityUtils.checkUpdate(
 
 This class will also help perform **object and field read access** checks before making **SOQL** queries, though you may want to check out the features of the **QueryFactory** class as it also leverages this utility class internally.
 
-# **New fflib\_QueryFactory.cls**
+### fflib_QueryFactory.cls
 
 ![QueryFactory]({{site.baseurl}}/assets/images/queryfactory.png)
 
@@ -50,7 +47,7 @@ Chris has done an amazing job with this class not only in its feature and functi
 ```java
 String soql = ‘SELECT ‘;  
 for(Integer i = 0; i< fieldList.size(); i++){  
- soql += fieldList + ‘, ‘;  
+    soql += fieldList + ‘, ‘;  
 }  
 soql = soql.substring(0,soql.length()-2);  
 soql += conditions != null && conditions.trim().size() > 0 ? ‘ WHERE ‘ +  
@@ -64,9 +61,9 @@ In it's simplest form it's use looks like this..
 ```java
 String soql =  
  new fflib\_QueryFactory(Contact.SObjectType)  
- .selectField(Contact.Name)  
- .setLimit(5)  
- .toSOQL();  
+     .selectField(Contact.Name)  
+    .setLimit(5)  
+    .toSOQL();  
 ```
 
 With **object and field read&nbsp;security enforcement** and **Fieldset** support would look like this...
@@ -74,23 +71,23 @@ With **object and field read&nbsp;security enforcement** and **Fieldset** suppor
 ```java
 String soql =  
  new fflib\_QueryFactory(Contact.SObjectType)  
- .assertIsAccessible().  
- .setEnforceFLS(true).  
- .selectFields(myFields)  
- .selectFieldSet(Contact.fieldSets.ContactPageFieldSet)  
- .setCondition(‘Name != “Bob”’)  
- .toSOQL();  
+    .assertIsAccessible().  
+    .setEnforceFLS(true).  
+    .selectFields(myFields)  
+    .selectFieldSet(Contact.fieldSets.ContactPageFieldSet)  
+    .setCondition(‘Name != “Bob”’)  
+    .toSOQL();  
 ```
 
 The class is fully commented and the associated test class has further examples, also&nbsp;Chris is keen to work on API for the SOQL where clause in the future, i look forward to seeing it!
 
-# **fflib\_SObjectSelector.cls (Selector Pattern) Updates**  
+### fflib_SObjectSelector.cls (Selector Pattern) Updates
 
 I have updated this base class used to support the [Selector pattern](https://developer.salesforce.com/page/Apex_Enterprise_Patterns_-_Selector_Layer), to leverage the **fflib\_QueryFactory** , in doing so you now have the option (as a constructor argument) to **enable Field Level Security** for fields selected by the selector. The default constructor and prior constructors are&nbsp;still supported, with the addition of the following that now allows you to control Fieldset, object and field level security enforcement&nbsp;respectively. For example...
 
 ```java
 OpportunitiesSelector oppsSelector =  
- new OpportunitiesSelector(includeFieldSetFields, enforceObjectSecurity, enforceFLS);  
+    new OpportunitiesSelector(includeFieldSetFields, enforceObjectSecurity, enforceFLS);  
 ```
 
 **NOTE:** You can of course implement your own Selector default constructor and enable/disable these features by default within that, if you find yourself constantly passing a certain combination of these configurations parameters.
@@ -100,10 +97,10 @@ For custom selector methods you can leverage a **QueryFactory constructed and in
 ```java
 public Database.QueryLocator queryLocatorReadyToInvoice()  
 {  
- assertIsAccessible();  
- return Database.getQueryLocator(  
- String.format('SELECT {0} FROM {1} WHERE InvoicedStatus\_\_c = \'\'Ready\'\' ORDER BY {2}',  
- new List\<String\>{getFieldListString(),getSObjectName(),getOrderBy()}));  
+    assertIsAccessible();  
+    return Database.getQueryLocator(  
+    String.format('SELECT {0} FROM {1} WHERE InvoicedStatus\_\_c = \'\'Ready\'\' ORDER BY {2}',  
+    new List\<String\>{getFieldListString(),getSObjectName(),getOrderBy()}));  
 }  
 ```
 
@@ -112,14 +109,15 @@ The updated&nbsp;patterns sample applications [OpportunitiesSelector](https://gi
 ```java
 public Database.QueryLocator queryLocatorReadyToInvoice()  
 {  
- return Database.getQueryLocator(  
- newQueryFactory().setCondition('InvoicedStatus\_\_c = \'\'Ready\'\'').toSOQL());  
+    return Database.getQueryLocator(  
+    newQueryFactory().setCondition('InvoicedStatus\_\_c = \'\'Ready\'\'').toSOQL());  
 }  
 ```
 
-This&nbsp;updated&nbsp; **fflib\_SObjectSelector&nbsp;base class is backwards** compatible from the API perspective, so you can choose to continue with the original&nbsp; **String.format** approach or adopt the **newQueryFactory** method accordingly. You can further review the old example [here](https://github.com/financialforcedev/fflib-apex-common-samplecode/blob/c68d55a46b35b955c8cb343580b7b500d977784c/fflib-sample-code/src/classes/OpportunitiesSelector.cls), against the new one [here](https://github.com/financialforcedev/fflib-apex-common-samplecode/blob/master/fflib-sample-code/src/classes/OpportunitiesSelector.cls).
+This updated **fflib\_SObjectSelector&nbsp;base class is backwards** compatible from the API perspective, so you can choose to continue with the original&nbsp; **String.format** approach or adopt the **newQueryFactory** method accordingly. You can further review the old example [here](https://github.com/financialforcedev/fflib-apex-common-samplecode/blob/c68d55a46b35b955c8cb343580b7b500d977784c/fflib-sample-code/src/classes/OpportunitiesSelector.cls), against the new one [here](https://github.com/financialforcedev/fflib-apex-common-samplecode/blob/master/fflib-sample-code/src/classes/OpportunitiesSelector.cls).
 
-# fflib_SObjectDomain.cls (Domain Pattern) Updates
+### fflib_SObjectDomain.cls (Domain Pattern) Updates
+
 
 This base class has to date had minimal functionality in it other than the routing of trigger events to the applicable virtual methods and object security enforcement. To support better configuration of these features and those in the future, i have added a new **Domain class configuration** feature, accessed via a new **Configuration** property.
 
@@ -128,15 +126,15 @@ Despite the focus on enforcing security in the above new features and updates, t
 ```java
 public class ApplicationLogs extends fflib\_SObjectDomain  
 {  
- public&nbsp;ApplicationLogs(List<ApplicationLog__c> records)  
- {  
- super(records);  
- Configuration.disableTriggerCRUDSecurity();  
- }  
+    public ApplicationLogs(List<ApplicationLog__c> records)  
+    {  
+        super(records);  
+        Configuration.disableTriggerCRUDSecurity();  
+    }  
 }  
 ```
 
-**Domain Trigger State**
+### Domain Trigger State
 
 I have also been asked to provide a means to maintain member variable **state** between invocation of the trigger handler methods. Currently if you define a **member variable** in your **Domain class** it is **reset** between the **before** and **after trigger phases**. This is due to the default trigger handler recreating your Domain class instance each time.
 
@@ -145,24 +143,24 @@ If you want to **retain** information or records queried in the before handler m
 ```java
 public class Opportunties extends fflib\_SObjectDomain  
 {  
- public String someState;
+    public String someState;
 
-public TestSObjectStatefulDomain(List\<Opportunity\> sObjectList)  
- {  
- super(sObjectList);  
- Configuration.enableTriggerState();  
- }
+    public TestSObjectStatefulDomain(List\<Opportunity\> sObjectList)  
+    {  
+        super(sObjectList);  
+        Configuration.enableTriggerState();  
+    }
 
-public override void onBeforeInsert()  
- {  
- System.assertEquals(null, someState);  
- someState = 'Something';  
- }
+    public override void onBeforeInsert()  
+    {  
+        System.assertEquals(null, someState);  
+        someState = 'Something';  
+    }
 
-public override void onAfterInsert()  
- {  
- System.assertEquals('Something', someState);  
- }  
+    public override void onAfterInsert()  
+    {  
+        System.assertEquals('Something', someState);  
+    }  
 }  
 ```
 

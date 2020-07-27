@@ -3,7 +3,7 @@ title: Unit Testing with the Domain Layer
 parent: Apex Commons
 nav_order: 3
 ---
-Writing true Apex&nbsp;[unit tests](http://en.wikipedia.org/wiki/Unit_testing) that are quite granular can be hard in Apex, especially when the application gets more complex, as their is limited mocking support, meaning you have to create all your test data and move it through stages in its life cycle (by calling other methods) to get to the logic your unit test needs to test. Which of course is in itself a valid test approach of definitely needed, this blog is certainly not aiming to detract from those. But these are more of an integration or functional test.&nbsp;[Wikipedia](http://en.wikipedia.org/wiki/Unit_testing) has this to say about unit tests...
+Writing true Apex [unit tests](http://en.wikipedia.org/wiki/Unit_testing) that are quite granular can be hard in Apex, especially when the application gets more complex, as their is limited mocking support, meaning you have to create all your test data and move it through stages in its life cycle (by calling other methods) to get to the logic your unit test needs to test. Which of course is in itself a valid test approach of definitely needed, this blog is certainly not aiming to detract from those. But these are more of an integration or functional test.&nbsp;[Wikipedia](http://en.wikipedia.org/wiki/Unit_testing) has this to say about unit tests...
 
 _In&nbsp;[computer programming](http://en.wikipedia.org/wiki/Computer_programming "Computer programming"),&nbsp; **unit testing** &nbsp;is a method by which individual units of&nbsp;[source code](http://en.wikipedia.org/wiki/Source_code "Source code"), sets of one or more computer program modules together with associated control data, usage procedures, and operating procedures are tested to determine if they are fit for use.<sup id="cite_ref-kolawa_1-0"><a href="http://en.wikipedia.org/wiki/Unit_testing#cite_note-kolawa-1">[1]</a></sup>&nbsp;Intuitively, one can view a unit as the smallest testable part of an application. In&nbsp;[procedural programming](http://en.wikipedia.org/wiki/Procedural_programming "Procedural programming"), a unit could be an entire module, but it is more commonly an individual function or procedure. In&nbsp;[object-oriented programming](http://en.wikipedia.org/wiki/Object-oriented_programming "Object-oriented programming"), a unit is often an entire interface, such as a class, but could be an individual method.<sup id="cite_ref-2"><a href="http://en.wikipedia.org/wiki/Unit_testing#cite_note-2">[2]</a></sup>&nbsp;Unit tests are short code fragments<sup id="cite_ref-3"><a href="http://en.wikipedia.org/wiki/Unit_testing#cite_note-3">[3]</a></sup>&nbsp;created by programmers or occasionally by&nbsp;[white box testers](http://en.wikipedia.org/wiki/White-box_testing "White-box testing")&nbsp;during the development process._
 
@@ -21,7 +21,7 @@ The **mocking approach to DML statements** &nbsp;used by the Domain layer here l
 
 ```java
 fflib_SObjectDomain.Test.Database.onInsert(  
- new Opportunity[] { new Opportunity ( Name = 'Test', Type = 'Existing Account' ) } );  
+  new Opportunity[] { new Opportunity ( Name = 'Test', Type = 'Existing Account' ) } );  
 ```
 
 The next thing you’ll want to do is use a slightly different convention when setting errors on your records or fields, this allows for you to assert what errors have been raised. This convention also improves from the less than ideal convention of **try/catch** and doing a **.contains('The driods i'm looking for!')** in the exception text for the message you are looking for.&nbsp;So instead of doing this on your **onValidate** …
@@ -47,22 +47,22 @@ private static void testInsertValidationFailedWithoutDML()
 {  
  // Insert data into mock database  
  Opportunity opp = new Opportunity ( Name = 'Test', Type = 'Existing Account' );  
- fflib\_SObjectDomain.Test.Database.onInsert(new Opportunity[] { opp } );
+ fflib_SObjectDomain.Test.Database.onInsert(new Opportunity[] { opp } );
 
-// Invoke Trigger handler and thus appropriate domain methods  
- fflib\_SObjectDomain.triggerHandler(Opportunities.class);
+ // Invoke Trigger handler and thus appropriate domain methods  
+ fflib_SObjectDomain.triggerHandler(Opportunities.class);
 
-// Assert results  
+ // Assert results  
  System.assertEquals(1,  
- fflib\_SObjectDomain.Errors.getAll().size());  
+ fflib_SObjectDomain.Errors.getAll().size());  
  System.assertEquals('You must provide an Account for Opportunities for existing Customers.',  
- fflib\_SObjectDomain.Errors.getAll()[0].message);  
+ fflib_SObjectDomain.Errors.getAll()[0].message);  
  System.assertEquals(Opportunity.AccountId,  
- ((fflib\_SObjectDomain.FieldError)fflib\_SObjectDomain.Errors.getAll()[0]).field);  
+  ((fflib_SObjectDomain.FieldError)fflib_SObjectDomain.Errors.getAll()[0]).field);  
 }  
 ```
 
 **NOTE:** &nbsp;The above error assertion approach still works when your using the classic DML and Apex Trigger approach to invoking your Domain class handlers, just make sure to utilise the **error** method convention as described above.
 
-There are also methods on the **fflib\_SObjectDomain.Test.Database** to emulate other DML operations such as **onUpdate** and **onDelete**. As I said at the start of this blog, this is really not ment as an alternative to your normal testing, but might help you get a little more granular on your testing, allowing for more diverse use cases and not to mention speeding up the test execution!
+There are also methods on the **fflib_SObjectDomain.Test.Database** to emulate other DML operations such as **onUpdate** and **onDelete**. As I said at the start of this blog, this is really not ment as an alternative to your normal testing, but might help you get a little more granular on your testing, allowing for more diverse use cases and not to mention speeding up the test execution!
 

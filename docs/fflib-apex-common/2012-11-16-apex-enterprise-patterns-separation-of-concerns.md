@@ -1,5 +1,5 @@
 ---
-title: Apex Enterprise Patterns - Separation of Concerns
+title: What is Separation of Concerns?
 parent: Apex Commons
 nav_order: 1
 ---
@@ -9,11 +9,11 @@ Software is often referred to as living thing that changes and evolves over time
 
 Complex code gets out of hand when you don't partition it properly and it becomes heavily intermixed. Making it hard to work from, error prone and worst still hard to learn, only serving to worsen the problem as you bring new developers into the party! Avoiding this to some degree at the basic level is often&nbsp;referred&nbsp;to as 'code re-use'. Which is of course a very good thing as well! The act of creating modules or libraries to share common calculations or processes amongst different parts of your&nbsp;application.
 
-#### Is SOC just a posh word for 'code re-use' then?
+### Is SOC just a posh word for 'code re-use' then?
 
 If your considering SOC properly, your doing some upfront thinking about the internal plumbing of your application (down to class naming conventions and coding guidelines) that you feel will endure and hopefully be somewhat self describing to others going forward. Rather than the usual adhoc approach to code re-use which sees&nbsp;fragments&nbsp;of code get moved around once two or more areas start to need it. Often just placed in MyUtil classes or some other generic dumping area. Which is fine, and certainly recommended vs copy and paste!
 
-#### So what are the&nbsp;benefits&nbsp;of SOC?
+### So what are the&nbsp;benefits&nbsp;of SOC?
 
 At a high level applications have storage, logic and one or more means to interact with them, be that by humans and/or other applications. Once you outline these, you can start to define layers within your application each with its own set of concerns and responsibilities to the application and other layers. Careful consideration and management of such layers is important to adopting SOC.
 
@@ -37,15 +37,11 @@ So if your app is process centric and/or getting pushed to implement more comple
 4. Visualforce provides a means for you to partition your code via [MVC](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) (a form of SOC for client development), but simply using Visualforce and Controllers does not&nbsp;guarantee you have implemented it. &nbsp;For example how complex are your action methods in your controllers? Do you have any code does more than just deal with handling content to and from the user?
 5. How easily can new developers find their way around your code base? How much time would they need to learn where to put new code and where to find existing behaviour?
 
-Depending on how you have or plan to partition / placed your code you may already be in good shape to tackle some of the above. If not or just curious, hopefully the upcoming articles will help shed a bit of light for further thought.
-
-### **Summary**
-
-This blog entry is the first describing Enterprise Application Architecture patterns, particularly focused on applying them on the Force.com platform. If you attended Dreamforce 2012 this year, you may have caught a presentation on this topic. In the meantime, if you missed the session and fancy a preview of the patterns that help support SOC. You can find the Github repo [here](https://github.com/financialforcedev/df12-apex-enterprise-patterns) along with slides and a recent re-run recording I did. For now, please feel free to comment, make suggestions and requests for topics / use cases you would like to be covered and I'll do my best to include and answer them!
+Depending on how you have or plan to partition / placed your code you may already be in good shape to tackle some of the above.
 
 #### LINKS
 
-Here are a few links to other resources, the DF12 session and discussions of late that relate to this post. These will give you some foresight into upcoming topics I'll be discussing here. Enjoy!
+Here are a few links to other resources.
 
 - [Separation of Concerns (Wikipedia)](http://en.wikipedia.org/wiki/Separation_of_concerns)
 - [Any documentation on writing&nbsp;reusable&nbsp;code?](http://salesforce.stackexchange.com/questions/4423/any-documentation-on-writing-reusable-code)

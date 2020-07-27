@@ -3,7 +3,7 @@ title: Doing more work with the Unit Of Work
 parent: Apex Commons
 nav_order: 5
 ---
-In a previous post I [introduced the Unit Of Work class](http://andyinthecloud.com/2013/06/09/managing-your-dml-and-transactions-with-a-unit-of-work/), which is part of the [Apex Enterprise Patterns series](https://github.com/financialforcedev/fflib-apex-common#this-library). As the original post describes it helps you **simplify your code** when it comes to performing **multiple DML statements over related objects** , as well as providing a **bulkification** and **transaction**  **management**. In this post i would like to share information on a **new feature** that adds some **extensibility** to the [fflib_SObjectUnitOfWork](https://github.com/financialforcedev/fflib-apex-common/blob/master/fflib/src/classes/fflib_SObjectUnitOfWork.cls) class.
+The Unit of Work pattern helps you **simplify your code** when it comes to performing **multiple DML statements over related objects** , as well as providing a **bulkification** and **transaction**  **management**. In this post I would like to share information on a **new feature** that adds some **extensibility** to the [fflib_SObjectUnitOfWork](https://github.com/financialforcedev/fflib-apex-common/blob/master/fflib/src/classes/fflib_SObjectUnitOfWork.cls) class.
 
 This new feature addresses use cases where the work you want it to do, does not fit with the use of the existing **registerDirty** , **registerNew** or **registerDeleted** methods. But you do want that work to only be performed **during the commitWork** method, along with other registered work and within the **same transaction** it manages.
 
@@ -67,11 +67,11 @@ The following is an example of this in use...
   // Create Unit Of Work as normal  
   fflib_SObjectUnitOfWork uow =  
   new fflib_SObjectUnitOfWork(  
-  new Schema.SObjectType[] {  
-  Product2.SObjectType,  
-  PricebookEntry.SObjectType,  
-  Opportunity.SObjectType,  
-  OpportunityLineItem.SObjectType });
+      new Schema.SObjectType[] {  
+      Product2.SObjectType,  
+      PricebookEntry.SObjectType,  
+      Opportunity.SObjectType,  
+      OpportunityLineItem.SObjectType });
 
   // Register some custom work  
   UpsertUnitOfWorkHelper myUpsertWork = new UpsertUnitOfWorkHelper();  
